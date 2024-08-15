@@ -16,15 +16,16 @@ from submit_job import submit_job
 #Recommendations:
 # - only scalars so if used in a unit needed application, default units are SI units (units specifier coming soon)
 # - recommended to setup passwordless SSH for user experience
+# - make sure you are connected to the cluster through VPN or ethernet
 
 # SCRIPT FUNCTIONS
 copy = False #True if you want to copy .sim file to cluster (.java files will always copy)
-run = True #True if you want to submit jobs to the cluster
+run = False #True if you want to submit jobs to the cluster
 
 # MUST SPECIFY --> general details
 batch_spreadsheet = "parameter.csv"
-directory_path_local = "C:\\Users\\younj\\Downloads\\upRiver\\"
-batch_file_path = "C:\\Users\\younj\\Downloads\\upRiver\\parameter.csv"
+directory_path_local = "C:\\Users\\younj\\Documents\\GitHub\\upRiver\\"
+batch_file_path = "C:\\Users\\younj\\Documents\\GitHub\\upRiver\\parameter.csv"
 directory_path_cluster = "/storage/coda1/p-sm53/0/jyoun39/project/"
 template = "onera-m6-sharp_airfoil" #don't add .sim afterwards
 
@@ -55,11 +56,14 @@ job = job_submission_details(account, nodes, taskspernode, mempercpu, time, qos,
 
 #main for loop to create .java, add parameters to .java, copy over .java and .sim files, then submit job on cluster
 for row_index in range(batch.num_rows):
-    start_macro_writer(row_index, parameters_to_add, batch, general) #this is good
-    append_macro_writer(row_index, parameters_to_add, batch, general)
-    print("\n")
-    submit_job_script(row_index, general, batch, job) #creates job submission script
-    submit_job(row_index, general, batch, ssh) #creates case directories, copies files, and submits job
+    if batch.column_data["process"][row_index] == 0:
+        pass
+    elif batch.column_data["process"][row_index] == 1:
+        start_macro_writer(row_index, parameters_to_add, batch, general) #this is good
+        append_macro_writer(row_index, parameters_to_add, batch, general)
+        print("\n")
+        submit_job_script(row_index, general, batch, job) #creates job submission script
+        submit_job(row_index, general, batch, ssh) #creates case directories, copies files, and submits job
 
 
 

@@ -11,8 +11,7 @@ public class case1 extends StarMacro {
        execute0();
        execute1();
        execute2();
-       executerun();
-       }
+   }
   private void execute0() {
 
     Simulation simulation_0 = 
@@ -67,9 +66,4 @@ public class case1 extends StarMacro {
     scalarGlobalParameter_6.getQuantity().setValueAndUnits(0.1, units_0);
   }
 
-  private void executerun() {
-    Simulation simulation_0 = 
-      getActiveSimulation();
-    simulation_0.getSimulationIterator().run();
-  }
-}
+ }
